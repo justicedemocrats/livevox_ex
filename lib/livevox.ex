@@ -1,4 +1,4 @@
-defmodule Livevox.Poller do
+defmodule Livevox.CallEventFeed do
   @moduledoc """
   Documentation for Livevox.
   """
@@ -33,10 +33,6 @@ defmodule Livevox.Poller do
         IO.puts "POST to realtime/v5.0/callEvent/feed with body #{inspect(%{token: token})}. Got response #{inspect(resp.body)}"
 
         get_calls(new_token)
-      end
-
-      def handle_call(call) do
-        IO.puts "Got call #{inspect(call)}"
       end
     end
   end
