@@ -45,7 +45,7 @@ in the system.
 
 To use this feature, you must implement a `handle_call` function, import a
 Macro, and then start that module as a worker.
-```
+```elixir
 defmodule MyApp.CallHandler do
   use Livevox.CallEventFeed
 
@@ -58,12 +58,12 @@ end
 ```
 
 and then elsewhere...
-```
+```elixir
 MyApp.CallHandler.start_link()
 ```
 
 or in your supeprvision tree:
-```
+```elixir
 children = [
   worker(MyApp.CallHandler, [])
 ]
