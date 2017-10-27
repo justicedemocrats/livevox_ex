@@ -30,8 +30,6 @@ defmodule Livevox.CallEventFeed do
         resp.body["callEvent"]
         |> Enum.each(fn call -> spawn(fn -> handle_call(call) end) end)
 
-        IO.puts "POST to realtime/v5.0/callEvent/feed with body #{inspect(%{token: token})}. Got response #{inspect(resp.body)}"
-
         get_calls(new_token)
       end
     end
