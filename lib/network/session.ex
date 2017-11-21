@@ -8,9 +8,12 @@ defmodule Livevox.Session do
 
   # State takes the format index
   def start_link do
-    Agent.start_link(fn ->
-      create_session()
-    end, name: __MODULE__)
+    Agent.start_link(
+      fn ->
+        create_session()
+      end,
+      name: __MODULE__
+    )
   end
 
   def new_session do
@@ -22,7 +25,10 @@ defmodule Livevox.Session do
     # Clean up
     session_id =
       case Agent.get(__MODULE__, fn session -> session end) do
-        %Livevox.Session{id: id, expires_at: expires_at} -> id # if needs updating, update and return
+        # if needs updating, update and return
+        %Livevox.Session{id: id, expires_at: expires_at} ->
+          id
+
         nil ->
           new_session()
           session_id()
@@ -31,12 +37,12 @@ defmodule Livevox.Session do
 
   defp create_session do
     %{body: %{"sessionId" => sessionId}} =
-      Livevox.Api.post("session/v5.0/login", [
+      Livevox.Api.post(
+        "session/v5.0/login",
         headers: [no_session: true],
         body: %{userName: @username, password: @password, clientName: @clientname}
-      ])
+      )
 
     %Livevox.Session{id: sessionId, expires_at: Timex.shift(Timex.now(), hours: 25)}
   end
-
 end

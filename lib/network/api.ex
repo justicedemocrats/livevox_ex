@@ -15,10 +15,13 @@ defmodule Livevox.Api do
   end
 
   defp process_request_headers(hdrs) do
-    hdrs = Enum.into(hdrs, [
-      "Accept": "application/json", "Content-Type": "application/json",
-      "Authorization": "Bearer #{@access_token}"
-    ])
+    hdrs =
+      Enum.into(
+        hdrs,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer #{@access_token}"
+      )
 
     if Keyword.has_key?(hdrs, :no_session) do
       Keyword.delete(hdrs, :no_session)
