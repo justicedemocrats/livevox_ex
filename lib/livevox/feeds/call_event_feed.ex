@@ -18,8 +18,7 @@ defmodule Livevox.CallEventFeed do
           %{body: %{"token" => token}} =
           Livevox.Api.post("realtime/v6.0/callEvent/feed", body: %{}, timeout: 12_000)
 
-        resp.body["callEvent"]
-        |> Enum.each(fn call -> spawn(fn -> handle_call(call) end) end)
+        handle_events(resp.body["callEvent"])
 
         get_calls(token)
       end
@@ -31,10 +30,14 @@ defmodule Livevox.CallEventFeed do
 
         num_calls = Map.get(resp.body, "callEvent", []) |> length()
 
-        resp.body["callEvent"]
-        |> Enum.each(fn call -> spawn(fn -> handle_call(call) end) end)
+        handle_events(resp.body["callEvent"])
 
         get_calls(new_token)
+      end
+
+      def handle_events(events) do
+        IO.puts("Calls: #{length(events)} events")
+        Enum.each(events, fn ev -> spawn(fn -> handle_call_event(ev) end) end)
       end
     end
   end

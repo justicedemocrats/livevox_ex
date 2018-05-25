@@ -10,7 +10,9 @@ defmodule Livevox.Application do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: LivevoxEx.Worker.start_link(arg)
-      worker(Livevox.Session, [])
+      worker(Livevox.Session, []),
+      worker(Livevox.Recorder.Call, []),
+      worker(Livevox.Recorder.Agent, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

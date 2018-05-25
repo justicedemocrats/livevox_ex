@@ -24,7 +24,8 @@ defmodule LivevoxEx.Mixfile do
     [
       {:httpotion, "~> 3.0.3"},
       {:poison, "~> 3.1"},
-      {:timex, "~> 3.1"}
+      {:timex, "~> 3.1"},
+      {:short_maps, "~> 0.1.2"}
     ]
   end
 end

@@ -10,7 +10,7 @@ defmodule Livevox.AgentEventFeed do
       use Agent
 
       def start_link do
-        Task.start_link(fn -> get_calls() end)
+        Task.start_link(fn -> get_activity() end)
       end
 
       def get_activity do
@@ -18,8 +18,7 @@ defmodule Livevox.AgentEventFeed do
           %{body: %{"token" => token}} =
           Livevox.Api.post("realtime/v6.0/agentEvent/feed", body: %{}, timeout: 12_000)
 
-        resp.body["agentEvent"]
-        |> Enum.each(fn event -> spawn(fn -> handle_event(event) end) end)
+        handle_events(resp.body["agentEvent"])
 
         get_activity(token)
       end
@@ -33,10 +32,14 @@ defmodule Livevox.AgentEventFeed do
             timeout: 12_000
           )
 
-        resp.body["agentEvent"]
-        |> Enum.each(fn event -> spawn(fn -> handle_event(event) end) end)
+        handle_events(resp.body["agentEvent"])
 
         get_activity(new_token)
+      end
+
+      defp handle_events(events) do
+        IO.puts("Agents: #{length(events)} events")
+        Enum.each(events, fn ev -> spawn(fn -> handle_agent_event(ev) end) end)
       end
     end
   end
